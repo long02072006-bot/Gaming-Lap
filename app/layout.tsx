@@ -15,8 +15,11 @@ const jbMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MÁY.VN — Laptop chính hãng, giá tốt",
-  description: "Cửa hàng laptop chuyên nghiệp — cấu hình rõ ràng, giá minh bạch.",
+  title: "Gaming Lap — Laptop gaming chính hãng, giá tốt",
+  description: "Cửa hàng laptop gaming chuyên nghiệp — cấu hình rõ ràng, giá minh bạch.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

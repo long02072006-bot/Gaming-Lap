@@ -133,7 +133,7 @@ export default function ProductDetail() {
             <button
               disabled={product.stock <= 0}
               className="font-display mt-6 w-full rounded-lg py-3 text-sm font-semibold transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
-              style={{ background: "var(--accent)", color: "#fff" }}
+              style={{ background: "var(--accent)", color: "#04141b" }}
             >
               {product.stock > 0 ? "Liên hệ mua hàng" : "Hết hàng"}
             </button>

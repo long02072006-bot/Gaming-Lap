@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #14161a;
-  --bg-raised: #1b1e24;
-  --bg-card: #1f2229;
-  --line: #2a2e37;
-  --text: #f3f4f1;
-  --text-dim: #9aa0ac;
-  --accent: #3d7fff;
-  --accent-dim: #2a4d94;
+  --bg: #0a1420;
+  --bg-raised: #0f1e2e;
+  --bg-card: #122335;
+  --line: #1f3a4f;
+  --text: #eaf6fb;
+  --text-dim: #7fa3b8;
+  --accent: #22d3ee;
+  --accent-dim: #157a94;
   --amber: #ffb238;
-  --green: #33c17e;
-  --red: #ff5c5c;
+  --green: #33e0a0;
+  --red: #ff5c7a;
 
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -42,7 +42,15 @@ h1, h2, h3, h4, .font-display {
 
 ::selection {
   background: var(--accent);
-  color: #fff;
+  color: #04141b;
+}
+
+.glow {
+  box-shadow: 0 0 24px -6px var(--accent);
+}
+
+.glow-text {
+  text-shadow: 0 0 18px rgba(34, 211, 238, 0.45);
 }
 
 :focus-visible {

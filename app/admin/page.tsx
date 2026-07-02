@@ -78,7 +78,7 @@ export default function AdminLogin() {
         <button
           disabled={loading}
           className="font-display w-full rounded-lg py-2.5 text-sm font-semibold disabled:opacity-50"
-          style={{ background: "var(--accent)", color: "#fff" }}
+          style={{ background: "var(--accent)", color: "#04141b" }}
         >
           {loading ? "Đang đăng nhập…" : "Đăng nhập"}
         </button>

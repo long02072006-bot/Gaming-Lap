@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { createClient, Product } from "@/lib/supabase";
 import { formatVND } from "@/lib/format";
-import { LogOut, Plus, Pencil, Trash2, X } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, X, UploadCloud, Loader2 } from "lucide-react";
 
 const EMPTY_FORM = {
   name: "",
@@ -31,6 +31,8 @@ export default function AdminDashboard() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState("");
 
   const loadProducts = useCallback(async () => {
     setLoading(true);
@@ -80,6 +82,30 @@ export default function AdminDashboard() {
     setShowForm(true);
   }
 
+  async function handleImageUpload(file: File) {
+    setUploadError("");
+    if (!file.type.startsWith("image/")) {
+      setUploadError("Vui lòng chọn file ảnh (jpg, png, webp...).");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("Ảnh quá lớn — vui lòng chọn ảnh dưới 5MB.");
+      return;
+    }
+    setUploadingImage(true);
+    const ext = file.name.split(".").pop();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    if (error) {
+      setUploadError("Tải ảnh lên thất bại. Kiểm tra lại bước tạo kho lưu ảnh trong README.");
+      setUploadingImage(false);
+      return;
+    }
+    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+    setForm((f) => ({ ...f, image_url: data.publicUrl }));
+    setUploadingImage(false);
+  }
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
@@ -127,7 +153,7 @@ export default function AdminDashboard() {
           <button
             onClick={openNewForm}
             className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold"
-            style={{ background: "var(--accent)", color: "#fff" }}
+            style={{ background: "var(--accent)", color: "#04141b" }}
           >
             <Plus size={16} /> Thêm sản phẩm
           </button>
@@ -224,8 +250,54 @@ export default function AdminDashboard() {
               <Field label="Hãng">
                 <input className={inputCls} style={inputStyle} value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} />
               </Field>
-              <Field label="Ảnh (URL)">
-                <input className={inputCls} style={inputStyle} value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} />
+              <Field label="Ảnh sản phẩm" full>
+                <div className="flex items-center gap-3">
+                  {form.image_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={form.image_url}
+                      alt="Xem trước"
+                      className="h-16 w-16 rounded-lg border object-cover"
+                      style={{ borderColor: "var(--line)" }}
+                    />
+                  ) : (
+                    <div
+                      className="flex h-16 w-16 items-center justify-center rounded-lg border"
+                      style={{ borderColor: "var(--line)", color: "var(--text-dim)" }}
+                    >
+                      <UploadCloud size={20} />
+                    </div>
+                  )}
+                  <label
+                    className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border py-2.5 text-sm"
+                    style={{ borderColor: "var(--line)", background: "var(--bg-raised)", color: "var(--text-dim)" }}
+                  >
+                    {uploadingImage ? (
+                      <>
+                        <Loader2 size={15} className="animate-spin" /> Đang tải lên…
+                      </>
+                    ) : (
+                      <>
+                        <UploadCloud size={15} /> {form.image_url ? "Đổi ảnh khác" : "Chọn ảnh từ máy"}
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageUpload(file);
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
+                </div>
+                {uploadError && (
+                  <p className="mt-1.5 font-mono text-xs" style={{ color: "var(--red)" }}>
+                    {uploadError}
+                  </p>
+                )}
               </Field>
               <Field label="Giá bán (VNĐ) *">
                 <input required type="number" className={inputCls} style={inputStyle} value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
@@ -265,7 +337,7 @@ export default function AdminDashboard() {
             <button
               disabled={saving}
               className="font-display mt-5 w-full rounded-lg py-2.5 text-sm font-semibold disabled:opacity-50"
-              style={{ background: "var(--accent)", color: "#fff" }}
+              style={{ background: "var(--accent)", color: "#04141b" }}
             >
               {saving ? "Đang lưu…" : editingId ? "Lưu thay đổi" : "Thêm sản phẩm"}
             </button>

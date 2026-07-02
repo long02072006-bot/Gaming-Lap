@@ -49,3 +49,29 @@ values
 ('MacBook Air M3 13"', 'Apple', 27990000, null, 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800', 'Apple M3 8-core', '8GB Unified', '256GB SSD', 'GPU 10-core', '13.6" Liquid Retina', 'Mỏng nhẹ, pin trâu, lý tưởng cho công việc văn phòng và di chuyển nhiều.', 20, true),
 ('Dell XPS 13 Plus', 'Dell', 34990000, 38990000, 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800', 'Intel Core i7-1360P', '16GB LPDDR5', '512GB SSD', 'Intel Iris Xe', '13.4" OLED 3.5K', 'Thiết kế cao cấp, màn hình OLED sắc nét, phù hợp dân văn phòng và sáng tạo.', 8, false),
 ('Lenovo Legion 5 Pro', 'Lenovo', 29990000, null, 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800', 'AMD Ryzen 7 7745HX', '16GB DDR5', '1TB SSD', 'RTX 4060 8GB', '16" WQXGA 165Hz', 'Cấu hình mạnh trong tầm giá, màn hình đẹp, tản nhiệt hiệu quả.', 15, false);
+
+-- =========================================================
+-- Kho lưu ảnh sản phẩm — để bạn upload ảnh trực tiếp từ máy
+-- thay vì phải dán link ảnh
+-- =========================================================
+
+insert into storage.buckets (id, name, public)
+values ('product-images', 'product-images', true)
+on conflict (id) do nothing;
+
+-- Ai cũng xem được ảnh (khách hàng ghé web cần thấy ảnh sản phẩm)
+create policy "Cho phép xem ảnh công khai"
+  on storage.objects for select
+  using (bucket_id = 'product-images');
+
+-- Chỉ admin (đã đăng nhập) mới được tải ảnh lên
+create policy "Chỉ admin được tải ảnh lên"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'product-images');
+
+-- Chỉ admin mới được xóa ảnh cũ
+create policy "Chỉ admin được xóa ảnh"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'product-images');

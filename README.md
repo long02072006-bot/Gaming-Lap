@@ -1,10 +1,13 @@
-# MÁY.VN — Web bán laptop
+# Gaming Lap — Web bán laptop gaming
 
 Web bán laptop với trang quản trị để bạn tự đăng / sửa / xóa sản phẩm bất cứ lúc nào,
 dữ liệu lưu trữ vĩnh viễn (không mất khi tải lại trang).
 
-**Công nghệ dùng:** Next.js (frontend) + Supabase (database + đăng nhập admin), host miễn phí trên Vercel.
+**Công nghệ dùng:** Next.js (frontend) + Supabase (database + đăng nhập admin + lưu ảnh), host miễn phí trên Vercel.
 Bạn **không cần biết code** để đưa web này lên mạng — chỉ cần làm theo đúng các bước dưới đây.
+
+> **Đã deploy web trước đó rồi, giờ chỉ cập nhật code mới?**
+> Bạn không cần làm lại từ đầu. Chỉ cần: (1) vào Supabase → SQL Editor → New query → copy đoạn SQL trong file `supabase-schema.sql` **từ dòng "Kho lưu ảnh sản phẩm" trở xuống** → Run — bước này tạo kho lưu ảnh để upload ảnh trực tiếp; (2) upload đè toàn bộ file trong thư mục này lên GitHub như cũ — Vercel sẽ tự deploy lại.
 
 ---
 

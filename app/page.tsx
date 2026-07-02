@@ -40,8 +40,8 @@ export default function Home() {
             Cấu hình rõ ràng — Giá minh bạch
           </p>
           <h1 className="font-display mt-3 max-w-2xl text-4xl font-bold leading-tight md:text-5xl">
-            Laptop chính hãng,{" "}
-            <span style={{ color: "var(--accent)" }}>đúng thứ bạn cần.</span>
+            Laptop gaming chính hãng,{" "}
+            <span style={{ color: "var(--accent)" }}>chiến mượt mọi tựa game.</span>
           </h1>
           <p className="mt-4 max-w-xl" style={{ color: "var(--text-dim)" }}>
             Không quảng cáo hoa mỹ. Chỉ có thông số thật, giá thật, và tồn kho cập nhật theo thời gian thực.
@@ -100,7 +100,7 @@ export default function Home() {
       </section>
 
       <footer className="border-t py-8 text-center font-mono text-xs" style={{ borderColor: "var(--line)", color: "var(--text-dim)" }}>
-        © {new Date().getFullYear()} MÁY.VN — Web demo tự dựng với Next.js + Supabase.
+        © {new Date().getFullYear()} Gaming Lap — Web demo tự dựng với Next.js + Supabase.
       </footer>
     </main>
   );
